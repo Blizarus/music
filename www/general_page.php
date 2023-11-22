@@ -1,104 +1,112 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Блочная вёрстка</title>
-<link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="container">
-	<div id="header">
-	<h2>Музыкальный сервис</h2>
-	</div>
-		 
-	<div id="sidebar">
-          <p> Главная </p>
-          <h3> Исполнители </h3>
-          <h3> Альбомы </h3>
-          <h3> Жанры </h3>
-          <h3> Все композиции </h3>
-          <h3> Анализ песни </h3>
-          <h2> настройки </h2>
-          <h3> Настройки профиля </h3>
-	</div>
-		 
-	<div id="content">
-	<h2>Основной контент страницы</h2>
-	</div>
-		 
-	<div id="clear">
-		 
-	</div>
-				
-</div>
+  <header class="header">
+    <a href="general_page.php">Музыкальный сервис</a>
+  </header>
+  <main class="main">
+    <div class="container">
+    <section class="settings">
+                <nav class="settings__nav">
+                  <span class="settings__text">Основное</span>
+                  <ul class="settings__list">
+                      <li class="settings__list-item">
+                        <img src="" alt="ИконкаГлавная">
+                        <a href="#" class="settings__link">Главная</a>
+                      </li>
+                      <li class="settings__list-item">
+                        <img src="" alt="ИконкаИсполнителей">
+                        <a href="#" class="settings__link">Исполнители</a>
+                      </li>
+                      <li class="settings__list-item">
+                        <img src="" alt="ИконкаЖанров">
+                        <a href="#" class="settings__link">Жанры</a>
+                      </li>
+                      <li class="settings__list-item">
+                        <img src="" alt="ИконкаКомпозиции">
+                        <a href="#" class="settings__link">Все композиции</a>
+                      </li>
+                      <li class="settings__list-item">
+                        <img src="" alt="ИконкаАнализа">
+                        <a href="#" class="settings__link">Анализ композиции</a>
+                      </li>
+                      <li class="settings__list-item">
+                        <img src="" alt="ИконкаПоиска">
+                        <a href="#" class="settings__link">Поиск копозиции</a>
+                      </li>
+                  </ul>
+                  <span class="settings__text">Настройки</span>
+                  <ul class="settings__list">
+                    <li class="settings__list-item">
+                      <img src="" alt="ИконкаПрофиля">
+                      <a href="entrance.php" class="settings__link">Войти в профиль</a>
+                    </li>
+                    <!-- <li class="settings__list-item">
+                      <img src="" alt="ИконкаПрофиля">
+                      <a href="#" class="settings__link">Просмотр профиля</a>
+                    </li>
+                    <li class="settings__list-item">
+                      <img src="" alt="ИконкаИзмененияПрофиля">
+                      <a href="#" class="settings__link">Настройки профиля</a>
+                    </li> -->
+                  </ul>
+                  <!-- <span class="settings__text">Администрирование</span>
+                  <ul class="settings__list">
+                    <li class="settings__list-item">
+                      <img src="" alt="ИконкаДобавления">
+                      <a href="#" class="settings__link">Добавление новой композиции</a>
+                    </li>
+                    <li class="settings__list-item">
+                      <img src="" alt="ИконкаИзменения">
+                      <a href="#" class="settings__link">Изменение композиции</a>
+                    </li>
+                    <li class="settings__list-item">
+                      <img src="" alt="ИконкаСтатистики">
+                      <a href="#" class="settings__link">Статистика пользователей</a>
+                    </li>
+                    <li class="settings__list-item">
+                      <img src="" alt="ИконкаПользователей">
+                      <a href="#" class="settings__link">Изменение данных пользователей</a>
+                    </li>
+                  </ul> -->
+                </nav>
+            </section>
+            <section class="content">
+              <div class="content-main">
+                <div class="content-news">
+                  <article class="news-block">
+                    <h2 class="news_heading">Новые композиции</h2>
+                    <p class="news_description">Подборка новых композиций в сервисе</p>
+                    <a href="#" class="news__link"><img src="" alt="ИконкаПерехода"></a>
+                  </article>
+                  <article class="news-block">
+                    <h2 class="news_heading">Топ прослушиваемых композиций</h2>
+                    <p class="news_description">Наиболее прослушиваемые композиции пользователями сервиса</p>
+                    <a href="#" class="news__link"><img src="" alt="ИконкаПерехода"></a>
+                  </article>
+                  <article class="news-block">
+                    <h2 class="news_heading">Для Вас </h2>
+                    <p class="news_description">Случайные музыкальные композиции, подобранные согласно вашим предпочтениям</p>
+                    <a href="#" class="news__link"><img src="" alt="ИконкаПерехода"></a>
+                  </article>
+                  <article class="news-block">
+                    <h2 class="news_heading">Новое для Вас</h2>
+                    <p class="news_description">Новые музыкальные композиции, подобранные согласно вашим предпочтениям</p>
+                    <a href="#" class="news__link"><img src="" alt="ИконкаПерехода"></a>
+                  </article>
+                </div>
+              </div>
+            </section>
+    </div>
+  </main>
 </body>
 </html>
-
-<style>
-   body {
-     background: #1F262E;
-     color: #ffff;
-     font-family: Arial, sans-serif;
-     /* font-size: 14px; */
-     margin: 0;
-     padding: 0;
-     box-sizing: border-box; 
-
-}
-
-#header {
-     background: #343A46;
-     width:  95%;
-     height: 8%;
-     border-bottom-left-radius: 20px; 
-     border-bottom-right-radius: 20px; 
-     margin-bottom: 2%;
-     display: flex; 
-     align-items: center; 
-     padding-left: 5%;
-}
-    
-#sidebar {
-     display: block;
-     align-items: left;
-     background: #343A46;
-     float: left;
-     width: 20%;
-     height: 80%;
-     border-radius: 20px;
-     margin-right: 3%;
-     margin-left: 1%;
-
-}
-
-#sidebar h3 {
-  padding-left: 15%; 
-  font-size: 20px;
-}
-
-#sidebar h2 {
-  padding-left: 10%; 
-  font-size: 20px;
-  text-transform: uppercase;
-}
-
-#sidebar h3:first-child {
-  margin-top: 15%; 
-}
-
-#sidebar img {
-  max-width: 100%; 
-  margin-right: 10px; 
-}
-
-#content {
-     background: #343A46;
-     float: right;
-     width: 75%;
-     height: 100%;
-     border-radius: 20px; 
-     margin-right: 1%;
-}
- 
-</style>
