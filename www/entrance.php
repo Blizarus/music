@@ -14,16 +14,47 @@ header('Content-Type: text/html; charset=utf-8');
     <a href="general_page.php">Музыкальный сервис</a>
   </header>
   <main class="main">
+  <div class="container">
     <div class="entrance">
-        <form action="new_client.php" method="post">
-            <h1>Вход в учетную запись</h1>
-            <p><a>Логин пользователя</a></p>
-            <input type="text" value="Логин">
-            <p><a>Пароль пользователя</a></p>
-            <input type="text" value="Пароль">
-            <p><button><img src="" alt="ИконкаВхода">Выполнить вход</button></p>
-            <p><button onclick="#"><img src="" alt="ИконкаРегистрации">Зарегистрироваться</button></p>
-        </form>
+            <h1 class="entrance-main_lable">Вход в учетную запись</h1>
+            <p><label class="entrance-minor_lable">Логин пользователя</label></p>
+            <input class="entrance-input" type="text" name="login" id="login">
+            <p><label class="entrance-minor_lable">Пароль пользователя</label></p>
+            <input type="text" class="entrance-input" name="password" id="password">
+            <p><button type="button" onclick="checkCredentials()"> <img src="" alt="ИконкаВхода">Выполнить вход</button></p>
+            <p id="warning" style="color: red;"></p>
+        <form action="registration.html">
+        <!-- <p><button onclick="registration.html"><img src="" alt="ИконкаРегистрации">Зарегистрироваться</button></p> -->
+        <p><input type="submit" name="submit" class="entrance-btn" value="Зарегистрироваться"><p>
+        
+      </form>
+      </div>
     </div>
   </main>
+  <script>
+    function checkCredentials() {
+      var login = document.getElementById("login").value;
+      var password = document.getElementById("password").value;
+      fetch('process.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'login=' + encodeURIComponent(login) + '&password=' + encodeURIComponent(password),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Перенаправление на другую страницу
+                    window.location.href = 'general_page.php';
+                } else {
+                    // Отображение предупреждения
+                    document.getElementById("warning").innerText = 'Пользователь не найден.';
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+   </script>
 </body>
