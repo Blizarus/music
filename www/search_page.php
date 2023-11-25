@@ -103,7 +103,7 @@ header('Content-Type: text/html; charset=utf-8');
             </section>
             <section class="content">
                 <div class="content-head">
-                <form action="results.php" method="post">
+                <form action="search.php" method="post">
                   <?php
                   $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -111,10 +111,6 @@ header('Content-Type: text/html; charset=utf-8');
                   if ($conn->connect_error) {
                       die("Connection failed: " . $conn->connect_error);
                   }
-                  
-                  // Получение данных из POST-запроса
-                  $login = $_POST['login'];
-                  $password = $_POST['password'];
                   
                   // Поиск пользователя в базе данных
                   
@@ -125,7 +121,6 @@ header('Content-Type: text/html; charset=utf-8');
                     // echo '<option value="'.$row[0].'">'.$row[1].'</option>';
                     echo '<p><button type="button" onclick="hideButtonAndShowInput(this.id)" id ="button'.$row[0].'"> <img src="" alt="ИконкаДобавления" >Поиск '.$row[1].'</button></p>';
                   }
-
                  
                   mysqli_data_seek($result, 0);
 
@@ -139,50 +134,15 @@ header('Content-Type: text/html; charset=utf-8');
                     
                   }
                   echo 
-                  '<button class="content-head__button" id ="button_search">
+                  '<button  onclick="performSearch()" class="content-head__button" id ="button_search">
                     <img class="content-head__image update" src="" alt="ИконкаПоиска">
                   </button>';
                   ?>
                 </form>
                 </div>
                 <div class="content-main">
-                    <div class="content-music">
-                        <div class="content-wrapper">
-                            <img class="content-wrapper__image" src="" alt="">
-                            <div class="content-wrapper__info">
-                                <h3 class="content-wrapper__text">Ace Of Base</h3>
-                                <ul class="content-wrapper__list">
-                                    <li class="content-wrapper__list-item">
-                                        Жанр: Поп
-                                    </li>
-                                    <li class="content-wrapper__list-item">
-                                        Год основания: 1990
-                                    </li>
-                                    <li class="content-wrapper__list-item">
-                                        Число прослушиваний: 0
-                                    </li>
-                                </ul>
-                                <button class="content-wrapper__buttons">Показатель все характеристики</button>
-                            </div>
-                        </div>
-                        <div class="content-wrapper">
-                            <img class="content-wrapper__image" src="image/anikv.jpeg" alt="">
-                            <div class="content-wrapper__info">
-                                <h3 class="content-wrapper__text">Anikv</h3>
-                                <ul class="content-wrapper__list">
-                                    <li class="content-wrapper__list-item">
-                                        Жанр: RnB
-                                    </li>
-                                    <li class="content-wrapper__list-item">
-                                        Год основания: 2018
-                                    </li>
-                                    <li class="content-wrapper__list-item">
-                                        Число прослушиваний: 1
-                                    </li>
-                                </ul>
-                                <button class="content-wrapper__buttons">Показатель все характеристики</button>
-                            </div>
-                        </div>
+                    <div class="content-music" id="searchResults">
+
                     </div>
                 </div>
             </section>
@@ -232,38 +192,117 @@ header('Content-Type: text/html; charset=utf-8');
 
         }
     }
+</script>
+<script>
     function performSearch() {
-      var searchData = {};
+    var formData = new FormData();
 
-      // Получаем значения всех input
-      <?php
-      mysqli_data_seek($result, 0);
-      while ($row = mysqli_fetch_row($result)) {
-          echo "var inputElement = document.getElementById('input".$row[0]."');\n";
-          echo "searchData['".$row[0]."'] = inputElement.value;\n";
-          echo "
-          if (inputElement.value === 'Поиск ".$row[1]."'){ 
-            searchData['".$row[0]."'] = ''; 
-          }\n";
-      }
-      ?>
-
-      // Отправляем данные на сервер
-      fetch('search.php', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(searchData),
-      })
-      .then(response => response.json())
-      .then(data => {
-          // Обработка данных, полученных с сервера
-          console.log(data);
-      })
-      .catch((error) => {
-          console.error('Error:', error);
-      });
+    <?php
+    mysqli_data_seek($result, 0);
+    while ($row = mysqli_fetch_row($result)) {
+        echo "var inputElement = document.getElementById('input".$row[0]."');\n";
+        echo "formData.append('".$row[0]."', inputElement.value);\n";
+        echo "
+        if (inputElement.value === 'Поиск ".$row[1]."'){ 
+            formData.set('".$row[0]."', '');
+        }\n";
     }
+    ?>
+    console.log("Printing formData:");
+    formData.forEach(function(value, key){
+        console.log(key, value);
+    });
+
+
+    // Отправляем данные на сервер
+    fetch('search.php', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Обработка данных, полученных с сервера
+        displayResults(data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+</script>
+
+<script>
+
+    function displayResults(data) {
+    var resultsContainer = document.getElementById('searchResults');
+
+    // Очищаем контейнер перед вставкой новых результатов
+    resultsContainer.innerHTML = '';
+
+    if (data.success) {
+        data.results.forEach(result => {
+            // Создаем элементы для отображения результата
+            var contentWrapper = document.createElement('div');
+            contentWrapper.className = 'content-wrapper';
+
+            var imageElement = document.createElement('img');
+            imageElement.className = 'content-wrapper__image';
+            imageElement.src = result.cover; // Замените на путь к изображению из данных
+
+            var infoWrapper = document.createElement('div');
+            infoWrapper.className = 'content-wrapper__info';
+
+            var titleElement = document.createElement('h3');
+            titleElement.className = 'content-wrapper__text';
+            titleElement.textContent = result.name; // Замените на соответствующее поле из данных
+
+            var listElement = document.createElement('ul');
+            listElement.className = 'content-wrapper__list';
+
+            // Создаем элементы списка для каждого поля
+            var genreElement = createListItem('Жанр', result.genre); // Передайте поле из данных
+            var artistElement = createListItem('Исполнитель', result.artist); // Передайте поле из данных
+            var durationElement = createListItem('Продолжительность', result.duration); // Передайте поле из данных
+            var presencevoiceElement = createListItem('Наличие голоса', result.presencevoice); // Передайте поле из данных
+            var tonalityElement = createListItem('Тональность', result.tonality); // Передайте поле из данных
+            var bpmElement = createListItem('BPM (Ударов в минуту)', result.bpm); // Передайте поле из данных
+            var auditionsElement = createListItem('Количество прослушиваний', result.auditions); // Передайте поле из данных
+
+            // Создаем кнопку
+            var buttonElement = document.createElement('button');
+            buttonElement.className = 'content-wrapper__buttons';
+            buttonElement.textContent = 'Показатель все характеристики';
+
+            // Добавляем созданные элементы в DOM
+            resultsContainer.appendChild(contentWrapper);
+            contentWrapper.appendChild(imageElement);
+            contentWrapper.appendChild(infoWrapper);
+            infoWrapper.appendChild(titleElement);
+            infoWrapper.appendChild(listElement);
+            listElement.appendChild(genreElement);
+            listElement.appendChild(artistElement);
+            listElement.appendChild(durationElement);
+            listElement.appendChild(presencevoiceElement);
+            listElement.appendChild(tonalityElement);
+            listElement.appendChild(bpmElement);
+            listElement.appendChild(auditionsElement);
+            infoWrapper.appendChild(buttonElement);
+        });
+    } else {
+        // Если поиск не успешен, отобразите соответствующее сообщение
+        var noResultsMessage = document.createElement('p');
+        noResultsMessage.textContent = 'Нет результатов поиска.';
+        resultsContainer.appendChild(noResultsMessage);
+    }
+}
+
+// Вспомогательная функция для создания элемента списка
+function createListItem(label, value) {
+    var listItem = document.createElement('li');
+    listItem.className = 'content-wrapper__list-item';
+    listItem.textContent = `${label}: ${value}`;
+    return listItem;
+}
+
 </script>
 </html>
