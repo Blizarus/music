@@ -154,10 +154,14 @@ body {
     height: 20px;
 }
 
-.content-head__input{
-    height: 30px;
-    border: 1px solid transparent;
+
+.content-search__button{
+    display: inline-block;
+    background-color: #8DFFAD; /* Цвет фона кнопки */
+    color: #000; /* Цвет текста кнопки */
+    padding: 10px 15px; /* Отступы внутри кнопки */
+    border: none;
     border-radius: 5px;
-    background-color: white;
-    padding-left: 10px;
+    text-align: center;
+    cursor: pointer;
 }

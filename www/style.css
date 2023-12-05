@@ -38,7 +38,6 @@ body {
     justify-content: space-between;
     padding: 0 calc(35% - 610px);
     margin-top: 1rem;
-    height: 80vh;
 }
 
 /* Для навигации */
@@ -101,7 +100,6 @@ body {
     background-color: #2B313D;
     border-radius: 15px;
     width: 75%;
-    height: 80vh;
 }
 
 .content-news{
@@ -166,6 +164,12 @@ body {
     padding: 10px;
 }
 
+.content-wrapper__text{
+    margin: 10px 20px;
+    color: white;
+    font-size: 20px;
+}
+
 .content-head__button{
     align-items: center;
     vertical-align: middle;
@@ -217,3 +221,29 @@ body {
     font-size: 20px;
     color: white;
 }
+
+.content-search__button{
+    display: inline-block;
+    background-color: #8DCFFF;
+    color: black;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    margin-right: 10px; /* Отступ между кнопками */
+    margin-bottom: 10px; /* Отступ между кнопками */
+
+
+}
+.content-head__buttons-row button {
+    margin-top: 10px; /* Отступ между кнопками */
+}
+.content-search__button img {
+vertical-align: middle; /* Выравнивание изображения по центру по вертикали */
+margin-right: 5px; /* Дополнительный отступ между изображением и текстом  */
+}
+.content-wrapper__text{
+margin: 10px 20px;
+color: white;
+font-size: 20px;
