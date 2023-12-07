@@ -21,23 +21,29 @@ header('Content-Type: text/html; charset=utf-8');
         <article class="news-block">
           <h2 class="content-wrapper_text">Новые композиции</h2>
           <p class="content-news_description">Подборка новых композиций в сервисе</p>
-          <a href="#" class="news-block-news_link"><img src="image/link.svg" alt="ИконкаПерехода"></a>
+          <a href="searchcriteria_page.php?criteria=news1" class="news-block-news_link"><img src="image/link.svg" alt="ИконкаПерехода"></a>
         </article>
         <article class="news-block">
           <h2 class="content-wrapper_text">Топ прослушиваемых композиций</h2>
           <p class="content-news_description">Наиболее прослушиваемые композиции пользователями сервиса</p>
-          <a href="#" class="news-block-news_link"><img src="image/link.svg" alt="ИконкаПерехода"></a>
+          <a href="searchcriteria_page.php?criteria=news2" class="news-block-news_link"><img src="image/link.svg" alt="ИконкаПерехода"></a>
         </article>
-        <article class="news-block">
+        <?php 
+        if (isset($_SESSION['login'])){
+          echo '
+          <article class="news-block">
           <h2 class="content-wrapper_text">Для Вас </h2>
           <p class="content-news_description">Случайные музыкальные композиции, подобранные согласно вашим предпочтениям</p>
-          <a href="#" class="news-block-news_link"><img src="image/link.svg" alt="ИконкаПерехода"></a>
+          <a href="searchcriteria_page.php?criteria=news3" class="news-block-news_link"><img src="image/link.svg" alt="ИконкаПерехода"></a>
         </article>
         <article class="news-block">
           <h2 class="content-wrapper_text">Новое для Вас</h2>
           <p class="content-news_description">Новые музыкальные композиции, подобранные согласно вашим предпочтениям</p>
-          <a href="#" class="news-block-news_link"><img src="image/link.svg" alt="ИконкаПерехода"></a>
+          <a href="searchcriteria_page.php?criteria=news4" class="news-block-news_link"><img src="image/link.svg" alt="ИконкаПерехода"></a>
         </article>
+          ';
+        }
+        ?>
       </section>
     </div>
   </main>

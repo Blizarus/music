@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 session_start();
 header('Content-Type: text/html; charset=utf-8');
 ?>
@@ -32,7 +32,7 @@ header('Content-Type: text/html; charset=utf-8');
 
             echo
               '<input class="content-head__input" type="text" id ="input"  placeholder="Поиск по исполнителю" name = "input">
-              <input type="image" name="submit" class="entrance-btn" src="image/search1.svg">';
+              <button type="submit" class="content-head__button"><img class="content-head__image" src="image/search2.svg" alt="ИконкаПоиска"></button>';
             ?>
           </form>
         </div>
@@ -45,7 +45,7 @@ header('Content-Type: text/html; charset=utf-8');
               $sql = "select artistid, name,
               (select count(liseningdate) from statistic s where s.audiofileid in 
               (select compositionid from composition c where c.artistid=a.artistid)),
-              coerpath from artist a
+              coverpath from artist a
               where LOWER(name) like LOWER('%" . $artist . "%')";
               $result = $conn->query($sql);
 
@@ -54,17 +54,29 @@ header('Content-Type: text/html; charset=utf-8');
               if ($result->num_rows > 0) {
                 $i = 1;
                 while ($row = mysqli_fetch_row($result)) {
-                  $a = str_replace($prefix, "", $row[3]);
-                  $url = 'searchcriteria_page.php?id=' . $row[0] . '&criteria=genre';
+                  $url = 'searchcriteria_page.php?id=' . $row[0] . '&criteria=artist&artist='. $row[1].'';
+                  $image_url = str_replace($prefix, "", $row[3]);
+
                   echo '
                     <div class="content-wrapper">
-                    <img class="content-wrapper__image" src="' . $a . '" alt="">
+                    <img class="content-wrapper__image" src="' . $image_url . '" alt="">
                     <div class="content-wrapper__info">
                       <h3 class="content-wrapper__text">' . $row[1] . '</h3>
                       <ul class="content-wrapper__list">
                         <li class="content-wrapper__list-item">
-                            Количество прослушиваний: ' . $row[2] . '
+                            Число прослушиваний: ' . $row[2] . '
                         </li>
+                      </ul>
+                      <ul class="content-wrapper__list">
+                        <li class="content-wrapper__list-item">
+                            Жанры: ';
+                            $genresResult  = $conn->query("select * from genre where genreid in (select genreid from genre_artist ga where ga.artistid=".$row[0].")");
+                            $genres = array();
+                            while ($genre = mysqli_fetch_row($genresResult )) {
+                              $genres[] = '<a class="settings__link" href="searchcriteria_page.php?id=' . $genre[0] . '&criteria=genre&genre='. $genre[1].'">' . $genre[1] . '</a>';
+                            }
+                            echo implode(', ', $genres); 
+                        echo '</li>
                       </ul>
                       <button onclick="redirectToPage(\'' . $url . '\')" class="content-wrapper__buttons" id="buttongenre' . $i . '" >Посмотреть композиции</button>
                     </div>

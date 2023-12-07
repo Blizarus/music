@@ -24,8 +24,7 @@ header('Content-Type: text/html; charset=utf-8');
             <p><button type="button" onclick="checkCredentials()"> <img src="" alt="ИконкаВхода">Выполнить вход</button></p>
             <p id="warning" style="color: red;"></p>
         <form action="registration.html">
-        <!-- <p><button onclick="registration.html"><img src="" alt="ИконкаРегистрации">Зарегистрироваться</button></p> -->
-        <p><input type="submit" name="submit" class="entrance-btn" value="Зарегистрироваться"><p>
+        <p><button type="submit" name="submit" class="entrance-btn"><img src="" alt="ИконкаРегистрации">Зарегистрироваться</button></p>
         
       </form>
       </div>

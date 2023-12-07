@@ -23,15 +23,21 @@ header('Content-Type: text/html; charset=utf-8');
             if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
             }
-
+           
             $criteria = $_GET['criteria'];
             $id = $_GET['id'];
-            if ($criteria === 'genre')
+            if ($criteria === 'genre'){
                 $Query = $conn->query("select name from genre where genreid = " . $id);
-            else if ($criteria === 'artist')
+                $genre =  $_GET['genre'];
+            }
+            else if ($criteria === 'artist'){
                 $Query = $conn->query("select name from artist where artistid = " . $id);
-            else if ($criteria === 'name' || $criteria === 'composition')
+                $artist =  $_GET['artist'];
+            }
+            else{
+                $id = -1;
                 $Query = $conn->query("select name from composition where compositionid = " . $id);
+            }
             $Data = mysqli_fetch_row($Query);
             ?>
             <section class="content">
@@ -48,9 +54,7 @@ header('Content-Type: text/html; charset=utf-8');
                         while ($row = mysqli_fetch_row($result)) {
                             if ($row[2] == $criteria){
                                 $sql = "select name from ".$criteria." where ".$criteria."id = ".$id."";
-                                //echo $sql;
                                 $value = mysqli_fetch_row($conn->query($sql));
-                                //echo $value[0];
                                  echo '<input class="content-head__input" type="text" id ="input' . $row[0] . '" style="display: none" placeholder="Поиск ' . $row[1] . '" name = "input' . $row[0] . '" value='.$value[0].'>'; 
                             }
                             else{
@@ -64,7 +68,7 @@ header('Content-Type: text/html; charset=utf-8');
                             </button>';
                         }
                         echo
-                            '<p><input type="image" name="submit" class="entrance-btn" src="image/search1.svg"></p>'
+                            ' <button type="submit" class="content-head__button"><img class="content-head__image" src="image/search2.svg" alt="ИконкаПоиска"></button>'
                             ?>
                     </form>
                 </div>
@@ -72,9 +76,11 @@ header('Content-Type: text/html; charset=utf-8');
                     <div class="content-music" id="searchResults">
                         <?php
 
-                            $genre = $_POST['input1'];
+                            if (!isset($genre))
+                                $genre = $_POST['input1'];
                             $name = $_POST['input2'];
-                            $artist = $_POST['input3'];
+                            if (!isset($artist))
+                                $artist = $_POST['input3'];
                             $sql = "
                             select c.name,
                             (select name from genre g where g.genreid = c.genreid),
@@ -83,13 +89,57 @@ header('Content-Type: text/html; charset=utf-8');
                             (select t.name from tonality t, сharacteristics_music cm where t.tonalityid = cm.tonality and
                             cm.audiofileid = c.compositionid) ,
                             (select bpm from сharacteristics_music cm where cm.audiofileid = c.compositionid) ,
-                            (select count(liseningdate) from statistic s where s.audiofileid = c.compositionid),
+                            (select count(liseningdate) from statistic s where s.audiofileid = c.compositionid) lisening,
                             (select presencevoice from сharacteristics_music cm where cm.audiofileid = c.compositionid),
-                            (select coverpath from audiofiles a where a.audiofileid = c.compositionid)
+                            (select coverpath from audiofiles a where a.audiofileid = c.compositionid),
+                            (select dateupload from audiofiles a where a.audiofileid = c.compositionid) date,
+                            c.artistid,
+                            c.genreid
                             from composition c
                             where artistid in (select artistid from artist where LOWER(name) like LOWER('%" . $artist . "%'))
                             and genreid in (select genreid from genre where LOWER(name) like LOWER('%" . $genre . "%'))
-                            and LOWER(name) like LOWER('%" . $name . "%')";
+                            and LOWER(name) like LOWER('%" . $name . "%') ";
+
+                            if ($criteria == 'news1')
+                                $sql = $sql . "order by date DESC limit 25";
+                            if ($criteria == 'news2')
+                                $sql = $sql . "order by lisening DESC limit 25";
+                            if ($criteria == 'news3')
+                                $sql = $sql . "
+                                where c.genreid in (
+                                select genreid from genre_artist
+                                where artistid in(
+                                select artistid from composition cmp
+                                where cmp.compositionid in (
+                                select audiofileid from statistic s
+                                where s.customerid = (select customerid from login_password where login=".$_SESSION['login']."))
+                                )
+                                )
+                                and c.compositionid not in(
+                                select compositionid from composition cmp
+                                where cmp.compositionid in (
+                                select audiofileid from statistic s
+                                where s.customerid = ".$_SESSION['login'].")
+                                )
+                                order by rand() limit 25";
+                            if ($criteria == 'news4')
+                                $sql = $sql . "
+                                where c.genreid in (
+                                select genreid from genre_artist
+                                where artistid in(
+                                select artistid from composition cmp
+                                where cmp.compositionid in (
+                                select audiofileid from statistic s
+                                where s.customerid = (select customerid from login_password where login=".$_SESSION['login']."))
+                                )
+                                )
+                                and c.compositionid not in(
+                                select compositionid from composition cmp
+                                where cmp.compositionid in (
+                                select audiofileid from statistic s
+                                where s.customerid = (select customerid from login_password where login=".$_SESSION['login']."))
+                                )
+                                order by date DESC limit 25";
                             $result = $conn->query($sql);
 
                             $prefix = "C:\\WebServers\\home\\music\\www\\";
@@ -97,18 +147,18 @@ header('Content-Type: text/html; charset=utf-8');
                             if ($result->num_rows > 0) {
                                 $i = 1;
                                 while ($row = mysqli_fetch_row($result)) {
-                                    $url = str_replace($prefix, "", $row[8]);
+                                    $image_url = str_replace($prefix, "", $row[8]);
                                     echo '
                                     <div class="content-wrapper">
-                                    <img class="content-wrapper__image" src="' . $url . '" alt="">
+                                    <img class="content-wrapper__image" src="' . $image_url . '" alt="">
                                     <div class="content-wrapper__info">
                                         <h3 class="content-wrapper__text">' . $row[0] . '</h3>
                                         <ul class="content-wrapper__list">
                                             <li class="content-wrapper__list-item">
-                                                Исполнитель: ' . $row[2] . '
+                                                Исполнитель: <a class="settings__link" href="searchcriteria_page.php?id=' . $row[10] . '&criteria=artist&artist='. $row[2].'">' . $row[2] . '</a>
                                             </li>
                                             <li class="content-wrapper__list-item">
-                                                Жанр: ' . $row[1] . '
+                                                Жанр: <a class="settings__link" href="searchcriteria_page.php?id=' . $row[11] . '&criteria=genre&genre='. $row[1].'">' . $row[1] . '</a>
                                             </li>
                                             <li class="content-wrapper__list-item">
                                                 Количество прослушиваний: ' . $row[7] . '
@@ -142,55 +192,5 @@ header('Content-Type: text/html; charset=utf-8');
         </div>
     </main>
 </body>
-<script defer>
-    window.onload = function () {
-        // Проверяем, была ли форма уже отправлена
-        var isFormSubmitted = getCookie('isFormSubmitted');
-        console.log('isFormSubmitted:', isFormSubmitted);
-
-        // Если форма еще не отправлена
-        if (!isFormSubmitted) {
-            // Получаем форму
-            var searchForm = document.getElementById("searchForm");
-
-            // Проверяем, существует ли форма
-            if (searchForm) {
-                // Отмечаем форму как отправленную
-                setCookie('isFormSubmitted', 'true');
-                console.log('Form marked as submitted.');
-
-                // Вызываем функцию для отправки формы
-                submitForm();
-            }
-        }
-    };
-
-    // Функция для отправки формы
-    function submitForm() {
-        var searchForm = document.getElementById("searchForm");
-        // Проверяем, существует ли форма
-        if (searchForm) {
-            // Отправляем форму
-            searchForm.submit();
-            console.log('Form submitted.');
-        }
-    }
-
-    // Установка cookie
-    function setCookie(name, value) {
-        document.cookie = name + '=' + value + '; path=/';
-    }
-
-    // Получение cookie
-    function getCookie(name) {
-        var matches = document.cookie.match(new RegExp(
-            '(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'
-        ));
-        return matches ? decodeURIComponent(matches[1]) : undefined;
-    }
-</script>
-
-
-
 <script src="scripts.js"></script>
 </html>

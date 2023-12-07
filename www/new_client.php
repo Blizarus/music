@@ -27,7 +27,7 @@ else{
         echo json_encode(array('status' => 'change'));
     }
     else{
-        $conn->query("INSERT INTO customers VALUES (NULL, '$name', '$lname', '$email', 'Russia', 0)");
+        $conn->query("INSERT INTO customers VALUES (NULL, '$name', '$lname', '$email', 0)");
         $conn->query("INSERT INTO login_password VALUES (NULL, '$login', SHA1('$password'))");
         $_SESSION['login'] = $login;
         echo json_encode(['status' => 'success']);

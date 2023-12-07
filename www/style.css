@@ -173,8 +173,8 @@ body {
 .content-head__button{
     align-items: center;
     vertical-align: middle;
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
     border: 1px solid transparent;
     background-color: #8DCFFF;
     border-radius: 5px;
@@ -246,4 +246,4 @@ margin-right: 5px; /* Дополнительный отступ между из�
 .content-wrapper__text{
 margin: 10px 20px;
 color: white;
-font-size: 20px;
+font-size: 20px;}

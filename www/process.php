@@ -16,15 +16,17 @@ $password = $_POST['password'];
 
 $sql = "select * from login_password where login = '$login' and password = sha1('$password')";
 $result = $conn->query($sql);
-
-
-if ($result->num_rows < 0) {
-    echo json_encode(array('success' => false));
-
-}
-else{
+if ($result->num_rows > 0) {
+    $Data = $result->fetch_row();
+    $id = $Data[0];
+    $result = $conn->query("SELECT administrator FROM customers WHERE customerid = $id");
+    $Data = $result->fetch_row();
     $_SESSION['login'] = $login;
+    $_SESSION['right'] = $Data[0];
     echo json_encode(['success' => true]);
+} else {
+    echo json_encode(['success' => false]);
 }
+
 $conn->close();
 ?>

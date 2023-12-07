@@ -8,7 +8,7 @@
             </li>
             <li class="settings__list-item">
             <img src="image/ticket.svg" alt="ИконкаИсполнителей">
-            <a href="#" class="settings__link">Исполнители</a>
+            <a href="artist_page.php" class="settings__link">Исполнители</a>
             </li>
             <li class="settings__list-item">
             <img src="image/computer.svg" alt="ИконкаЖанров">
@@ -16,7 +16,7 @@
             </li>
             <li class="settings__list-item">
             <img src="image/playback.svg" alt="ИконкаКомпозиции">
-            <a href="searchcriteria_page.php?id=-1&criteria=composition" class="settings__link">Все композиции</a> 
+            <a href="searchcriteria_page.php?criteria=composition" class="settings__link">Все композиции</a> 
             </li>
             <li class="settings__list-item">
             <img src="image/analize.svg" alt="ИконкаАнализа">
@@ -24,7 +24,7 @@
             </li>
             <li class="settings__list-item">
             <img src="image/search.svg" alt="ИконкаПоиска">
-            <a href="searchcriteria_page.php?id=0&criteria=name" class="settings__link">Поиск копозиции</a>
+            <a href="searchcriteria_page.php?criteria=name" class="settings__link">Поиск копозиции</a>
             </li>
         </ul>
         <span class="settings__text">Настройки</span>
@@ -61,26 +61,30 @@
             </li>';
             }
         ?>
-            
         </ul>
-        <!-- <span class="settings__text">Администрирование</span>
-        <ul class="settings__list">
-        <li class="settings__list-item">
-            <img src="" alt="ИконкаДобавления">
-            <a href="#" class="settings__link">Добавление новой композиции</a>
-        </li>
-        <li class="settings__list-item">
-            <img src="" alt="ИконкаИзменения">
-            <a href="#" class="settings__link">Изменение композиции</a>
-        </li>
-        <li class="settings__list-item">
-            <img src="" alt="ИконкаСтатистики">
-            <a href="#" class="settings__link">Статистика пользователей</a>
-        </li>
-        <li class="settings__list-item">
-            <img src="" alt="ИконкаПользователей">
-            <a href="#" class="settings__link">Изменение данных пользователей</a>
-        </li>
-        </ul> -->
+        <?php
+        if ($_SESSION['right'] == 1){
+            echo '
+            <span class="settings__text">Администрирование</span>
+            <ul class="settings__list">
+            <li class="settings__list-item">
+                <img src="" alt="ИконкаДобавления">
+                <a href="addnewcompotision.php" class="settings__link">Добавление новой композиции</a>
+            </li>
+            <li class="settings__list-item">
+                <img src="" alt="ИконкаИзменения">
+                <a href="#" class="settings__link">Изменение композиции</a>
+            </li>
+            <li class="settings__list-item">
+                <img src="" alt="ИконкаСтатистики">
+                <a href="#" class="settings__link">Статистика пользователей</a>
+            </li>
+            <li class="settings__list-item">
+                <img src="" alt="ИконкаПользователей">
+                <a href="#" class="settings__link">Изменение данных пользователей</a>
+            </li>
+            </ul>';
+        }
+        ?>
     </nav>
 </section>
