@@ -37,6 +37,19 @@ function hideInputAndShowButton(buttonId) {
         button.style.display = 'inline-block';
     }
 }
+
 function redirectToPage(url) {
     window.location.href = url;
+}
+
+function playAudio(audioSource) {
+    // Получаем доступ к элементу audio
+    var audioPlayer = document.getElementById('audioPlayer');
+    console.log("FFFF");
+    // Устанавливаем новый источник аудио
+    if (audioPlayer) {
+        audioPlayer.style.display = 'block';
+        audioPlayer.src = audioSource;
+        audioPlayer.play();
+    }
 }

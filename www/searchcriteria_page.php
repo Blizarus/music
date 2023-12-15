@@ -10,11 +10,20 @@ header('Content-Type: text/html; charset=utf-8');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="search.css">
 </head>
 
 <body>
     <header class="header">
-        <a href="general_page.php">Музыкальный сервис</a>
+    <?php 
+    // include 'head.php';
+    ?>
+    <a href="general_page.php">Музыкальный сервис</a>
+    <div class="music-progress">
+    <audio id="audioPlayer" controls style="display: none">
+    </audio>
+    </div>
+
     </header>
     <main class="main">
         <div class="container">
@@ -64,7 +73,7 @@ header('Content-Type: text/html; charset=utf-8');
                             echo
                             '
                             <button type="button" onclick="hideInputAndShowButton(this.id)" class="content-head__button" id ="button_hide' . $row[0] . '" style="display: none" >
-                            <img class="content-head__image" src="image/cross.svg" alt="ИконкаКрестика">
+                                <img class="content-head__image" src="image/cross.svg" alt="ИконкаКрестика">
                             </button>';
                         }
                         echo
@@ -94,7 +103,8 @@ header('Content-Type: text/html; charset=utf-8');
                             (select coverpath from audiofiles a where a.audiofileid = c.compositionid),
                             (select dateupload from audiofiles a where a.audiofileid = c.compositionid) date,
                             c.artistid,
-                            c.genreid
+                            c.genreid,
+                            (select filepath from audiofiles a where a.audiofileid = c.compositionid)
                             from composition c
                             where artistid in (select artistid from artist where LOWER(name) like LOWER('%" . $artist . "%'))
                             and genreid in (select genreid from genre where LOWER(name) like LOWER('%" . $genre . "%'))
@@ -148,6 +158,7 @@ header('Content-Type: text/html; charset=utf-8');
                                 $i = 1;
                                 while ($row = mysqli_fetch_row($result)) {
                                     $image_url = str_replace($prefix, "", $row[8]);
+                                    $audio_url = str_replace($prefix, "", $row[12]);
                                     echo '
                                     <div class="content-wrapper">
                                     <img class="content-wrapper__image" src="' . $image_url . '" alt="">
@@ -178,6 +189,9 @@ header('Content-Type: text/html; charset=utf-8');
                                         </ul>
                                         <button onclick="hideButtonAndShowInfo(this.id)" class="content-wrapper__buttons" id="buttoninfo' . $i . '" >Показатель все характеристики</button>
                                     </div>
+                                    <button class="content-play__button" onclick="playAudio(\''. $audio_url .'\')">
+                                        <img class="content-head__image" src="image/play.png" alt="ИконкаПлей">
+                                    </button>
                                     </div>
                                     ';
                                     $i = $i + 1;
